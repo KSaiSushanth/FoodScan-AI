@@ -41,8 +41,18 @@ def home():
     return "Food Detection Backend Running"
 
 
-@app.route("/predict", methods=["POST"])
+@app.after_request
+def add_cors_headers(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Headers", "*")
+    response.headers.add("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+    return response
+
+
+@app.route("/predict", methods=["POST", "OPTIONS"])
 def predict():
+    if request.method == "OPTIONS":
+        return "", 200
 
     if "image" not in request.files:
         return jsonify({
