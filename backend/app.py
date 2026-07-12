@@ -7,7 +7,7 @@ import io
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*", "allow_headers": "*", "methods": "*"}})
 
 # Load trained model
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
