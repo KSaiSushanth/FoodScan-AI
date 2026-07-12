@@ -5,6 +5,14 @@ import numpy as np
 import tensorflow as tf
 import io
 import os
+import gc
+
+# Optimize TensorFlow memory usage for Render (512MB RAM limit)
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+os.environ["TF_NUM_INTEROP_THREADS"] = "1"
+os.environ["TF_NUM_INTRAOP_THREADS"] = "1"
+tf.config.threading.set_inter_op_parallelism_threads(1)
+tf.config.threading.set_intra_op_parallelism_threads(1)
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*", "allow_headers": "*", "methods": "*"}})
@@ -113,6 +121,11 @@ def predict():
         confidence = float(
             np.max(predictions) * 100
         )
+
+        # Cleanup memory immediately after prediction
+        del img_array
+        del predictions
+        gc.collect()
 
         return jsonify({
             "food": predicted_class,
