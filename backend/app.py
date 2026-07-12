@@ -12,7 +12,7 @@ CORS(app)
 # Load trained model
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 model = tf.keras.models.load_model(
-    os.path.join(BASE_DIR, "model", "food_classifier_tfdata.keras")
+    os.path.join(BASE_DIR, "model", "food_classifier_tfdata.h5")
 )
 
 IMG_SIZE = 150
